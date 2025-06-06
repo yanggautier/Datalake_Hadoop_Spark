@@ -1,0 +1,122 @@
+version: '3'
+
+services:
+
+  namenode:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: namenode
+    hostname: namenode
+    user: root
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+      - ./start-namenode.sh:/start-namenode.sh
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    command: ["/bin/bash", "/start-namenode.sh"]
+    networks:
+      - hadoop_network
+
+  datanode1:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: datanode1
+    hostname: datanode1
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+    depends_on:
+      - namenode
+    command: ["hdfs", "datanode"]
+    networks:
+      - hadoop_network
+
+  datanode2:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: datanode2
+    hostname: datanode2
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+    depends_on:
+      - namenode
+    command: ["hdfs", "datanode"]
+    networks:
+      - hadoop_network
+
+  resourcemanager:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: resourcemanager
+    hostname: resourcemanager
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+    ports:
+      - "8088:8088"
+    depends_on:
+      - namenode
+    command: ["yarn", "resourcemanager"]
+    networks:
+      - hadoop_network
+
+  nodemanager:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: nodemanager1
+    hostname: nodemanager1
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+    depends_on:
+      - resourcemanager
+    command: ["yarn", "nodemanager"]
+    networks:
+      - hadoop_network
+
+  historyserver:
+    build:
+      context: .
+      dockerfile: Dockerfile  
+    container_name: historyserver
+    hostname: historyserver
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+    ports:
+      - "19888:19888"
+    depends_on:
+      - namenode
+      - resourcemanager
+    command: ["mapred", "historyserver"]
+    networks:
+      - hadoop_network
+
+  wordcount:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: wordcount
+    hostname: wordcount
+    user: root
+    volumes:
+      - ./hadoop_config:/opt/hadoop/etc/hadoop
+      - ./python_scripts:/python_scripts
+      - ./wordcount-job.sh:/wordcount-job.sh
+      - ./input_data:/tmp
+      - ./wordcount_output_local:/tmp/wordcount_results
+    depends_on:
+      - namenode
+      - datanode1
+      - datanode2
+      - resourcemanager
+      - nodemanager
+    command: ["/bin/bash", "/wordcount-job.sh"]
+    networks:
+      - hadoop_network
+
+networks:
+  hadoop_network:
+    driver: bridge

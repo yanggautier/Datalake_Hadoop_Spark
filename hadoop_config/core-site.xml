@@ -1,0 +1,17 @@
+<configuration>
+    <property>
+        <name>fs.default.name</name>
+        <value>hdfs://namenode</value>
+        <description>URL de Namenode.</description>
+    </property>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://namenode:9000</value>
+        <description>URL de Namenode.</description>
+    </property>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/opt/hadoop/data/tmp</value>
+        <description>Répertoire temporaire pour Hadoop.</description>
+    </property>
+</configuration>

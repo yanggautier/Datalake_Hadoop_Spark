@@ -1,0 +1,27 @@
+<configuration>
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/opt/hadoop/data/nameNode</value>
+        <description>Chemin où le NameNode stocke ses métadonnées.</description>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/opt/hadoop/data/dataNode</value>
+        <description>Chemin où les DataNodes stockent les blocs de données.</description>
+    </property>
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+        <description>Le nombre de réplications des blocs de données.</description>
+    </property>
+    <property>
+        <name>dfs.namenode.rpc-address</name>
+        <value>namenode:9000</value>
+        <description>Adresse RPC du NameNode - doit correspondre à fs.defaultFS</description>
+    </property>
+    <property>
+        <name>dfs.namenode.http-address</name>
+        <value>namenode:9870</value>
+        <description>Adresse HTTP du NameNode pour l'interface web</description>
+    </property>
+</configuration>
