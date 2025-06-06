@@ -71,7 +71,7 @@ docker cp input_data/wordcount.txt namenode: /tmp/
 2. Charger ces données dans le HDFS
 
 ```bash
-hdfs dfs -put /tmp/ /input_data/raw
+hdfs dfs -put /tmp/* /input_data/raw
 ```
 
 ## 3. Comparer MapReduce avec Spark
@@ -85,19 +85,23 @@ hdfs dfs -put /tmp/ /input_data/raw
 
 ## Arborescence du projt
 ```          
-├── data
-│   └── wordcount.txt                      Données pour qu'on puisse compter les mots
-├── docker-compose.yml                     Fichier docker-compose
-├── hadoop_config                          Répertoire contient des configurations des nodes
-│   ├── core-site.xml                      Configurations fondamentales d'Hadoop, notamment le système de fichiers par défaut
-│   ├── hdfs-site.xml                      Configurations spécifiques à HDFS
-│   ├── log4j.properties                   Configurations de logs
-│   ├── mapred-site.xml                    Configurations de MapReduce
-│   └── yarn-site.xml                      Configurations de YARN, le gestionnaire de ressources d'Hadoop
+├── Dockerfile             Image Docker pour tourner le clustervHadoop et Spark
 ├── README.md
-├── hadoop_datanode1                       Volume de datanode1
-├── hadoop_datanode2                       Volume de datanode1
-├── hadoop_namenode                        Volume de namenode
-├── init-datanode.sh                       Script pour l'initialisation des datanodes
-└── start-hdfs.sh                          Script pour l'initialisation de namenode
+├── apps_output            Volume pour la sortie des données processed
+├── docker-compose.yml     docker-compose pour l'ensemble de l'architecture
+├── hadoop_config          Configuration pour l'architecture Hadoop
+│   ├── capacity-scheduler.xml
+│   ├── core-site.xml
+│   ├── hdfs-site.xml
+│   ├── log4j.properties
+│   ├── mapred-site.xml
+│   └── yarn-site.xml
+├── input_data             Données d'entrée
+│   └── wordcount.txt      Fichier à compter l'occurence des mots
+├── python_scripts         Répertoire pour les scripts Python
+│   ├── mapper.py          Script python pour la partie Map du Mapreduce
+│   ├── reducer.py         Script python pour la partie Reduce du Mapreduce
+│   └── run_spark.py       Script python pour exécuter pyspark
+├── start-namenode.sh      Script pour démarrer le namenode
+└── wordcount-job.sh       Script pour initialiser l'arborescence dans HDFS, copie des fichiers jars dans HDFS et exécuter les scripts Python
 ```
