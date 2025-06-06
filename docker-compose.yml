@@ -76,6 +76,11 @@ services:
     command: ["yarn", "nodemanager"]
     networks:
       - hadoop_network
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+          cpus: '2.0'
 
   historyserver:
     build:
@@ -94,6 +99,7 @@ services:
     networks:
       - hadoop_network
 
+
   wordcount:
     build:
       context: .
@@ -106,7 +112,7 @@ services:
       - ./python_scripts:/python_scripts
       - ./wordcount-job.sh:/wordcount-job.sh
       - ./input_data:/tmp
-      - ./wordcount_output_local:/tmp/wordcount_results
+      - ./apps_output:/apps_output
     depends_on:
       - namenode
       - datanode1

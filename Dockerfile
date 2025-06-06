@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     curl \
     tar \
+    bc \
     openjdk-11-jdk-headless \
     python3 \
     python3-pip \
